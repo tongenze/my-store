@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const routesdata = createSlice({
-  name: "routesdata",
+const commondata = createSlice({
+  name: "commondata",
   initialState: {
     n: 0,
   },
   reducers: {
     add(state, action) {
       console.log(state, action);
+      state.n = state.n + action.payload;
     },
   },
 });
 
-export const {add} = routesdata.actions
+export const { add } = commondata.actions;
 
-
-export default routesdata.reducer;
+export default commondata.reducer;

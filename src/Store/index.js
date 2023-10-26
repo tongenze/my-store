@@ -1,8 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 
-import routesdata from "./State/common"
+import commondata from "./State/common";
+import routesdata from "./State/routedata";
 export default configureStore({
-    reducer:{
-        routesdata
-    }
-})
+  reducer: {
+    commondata,
+    routesdata,
+  },
+});
