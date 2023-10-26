@@ -1,47 +1,38 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom"
+import { lazy } from "react"
+import { useRoutes } from "react-router-dom"
 
-import HomeView from "../Page/HomeView";
-import LoginView from "../Page/LoginView";
-import WelcomeView from "../Page/WelcomeView";
-import ContentView from "../Page/ContentView";
-import Page1 from "../Page/Components/page1";
-import Page2 from "../Page/Components/page2";
+//定义懒加载路由方法
+const lazyLoad = (modulename) => {
+  const Module = lazy(() => import(`../Page/${modulename}`))
+  return <Module />
+}
 
 export const Routes = [
   {
     path: "/",
-    element: <Navigate to="/login" />,
+    element: <Navigate to='/login' />,
   },
   {
     path: "/login",
-    element: <LoginView />,
+    element: lazyLoad("LoginView"),
   },
-
   {
     path: "/home",
-    element: <HomeView />,
+    element: lazyLoad("HomeView"),
     children: [
       {
         path: "/home",
-        element: <Navigate to="/home/welcome" />,
+        element: <Navigate to='/home/welcome' />,
       },
       {
         path: "/home/welcome",
-        element: <WelcomeView />,
+        element: lazyLoad("WelcomeView"),
       },
       {
         path: "/home/content",
-        element: <ContentView />,
-        children: [
-          {
-            path: "/home/content/page1",
-            element: <Page1 />,
-          },
-          {
-            path: "/home/content/page2",
-            element: <Page2 />,
-          },
-        ],
+        element: lazyLoad("ContentView"),
+        children: [],
       },
     ],
   },
@@ -50,8 +41,39 @@ export const Routes = [
   //     path: '*',
   //     element: LazyLoad('/view/404')
   // }
-];
-//添加一个 动态路由的函数 在登陆的时候 调用 以切换不同的路由
-// export const SetRoute = function(arr){
+]
 
-// }
+export const route = [
+  {
+    id: 1,
+    path: "/home/content/page1",
+    element: lazyLoad("Components/page1"),
+  },
+  {
+    id: 2,
+    path: "/home/content/page2",
+    element: lazyLoad("Components/page2"),
+  },
+]
+export const SetRoute = function (arr) {
+  console.log(Routes)
+  console.log(arr)
+  let is = false
+  arr.forEach((i) => {
+    Routes[2].children[2].children.forEach((n) => {
+      if (n.id === i) {
+        is = true
+      }
+    })
+    if (is) return
+    route.forEach((j) => {
+      if (i === j.id) {
+        Routes[2].children[2].children.push(j)
+      }
+    })
+  })
+}
+
+export const Element = function(){
+  return useRoutes(Routes)
+}
