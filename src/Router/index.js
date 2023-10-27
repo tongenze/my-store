@@ -1,111 +1,55 @@
 import { Navigate } from "react-router-dom";
 import { lazy } from "react";
 import configureStore from "../Store/index";
-import { useRoutes } from "react-router-dom";
 import { change } from "../Store/State/routedata";
 //定义懒加载路由方法
 const lazyLoad = (modulename) => {
   const Module = lazy(() => import(`../Page/${modulename}`));
   return <Module />;
 };
-
-export let Routes = [
-  {
-    path: "/",
-    element: <Navigate to="/login" />,
-  },
-  {
-    path: "/login",
-    element: lazyLoad("LoginView"),
-  },
-  {
-    path: "/home",
-    element: lazyLoad("HomeView"),
-    children: [
-      {
-        path: "/home",
-        element: <Navigate to="/home/welcome" />,
-      },
-      {
-        path: "/home/welcome",
-        element: lazyLoad("WelcomeView"),
-      },
-      {
-        path: "/home/content",
-        element: lazyLoad("ContentView"),
-        children: [],
-      },
-    ],
-  },
-  // 404页
-  // {
-  //     path: '*',
-  //     element: LazyLoad('/view/404')
-  // }
-];
-
-// const Routes = function () {
-//   console.log(3, configureStore.getState().routesdata);
-//   let routesdata = configureStore.getState().routesdata;
-//   let Routes = getdata(routesdata.routesdata);
-//   console.log(4, "hahahahahahah");
-//   // const dispatch = useDispatch();
-//   // const routesdata = useSelector((state) => state.routesdata);
-//   // console.log(routesdata);
-//   return Routes;
+// 路由鉴权组件
+// const Appraisal = （{children}) => {
+//   const token = localStorage.getItem("token");
+//   return token ? children : <Navigate to="/login" />;
 // };
 
-// const getdata = function (arr) {
-//   let list = [];
-//   arr.forEach((i, index) => {
-//     if (i.topath) {
-//       list.push({ path: i.path, element: <Navigate to={i.topath} /> });
-//     } else {
-//       if (!i.children) {
-//         list.push({ path: i.path, element: lazyLoad(i.importpath) });
-//       } else {
-//         list.push({
-//           path: i.path,
-//           element: lazyLoad(i.importpath),
-//           children: [],
-//         });
-//       }
-//     }
-//     if (i.children) {
-//       let res = getdata(i.children);
-//       list[index].children.push(...res);
-//     }
-//   });
-//   return list;
-// };
+//路由数据组件化
+export const allRoutes = function (routes) {
+  let list = [];
+  routes.forEach((i, index) => {
+    if (i.topath) {
+      list.push({ path: i.path, element: <Navigate to={i.topath} /> });
+    } else {
+      if (!i.children) {
+        list.push({ path: i.path, element: lazyLoad(i.importpath) });
+      } else {
+        list.push({
+          path: i.path,
+          element: lazyLoad(i.importpath),
+          children: [],
+        });
+      }
+    }
+    if (i.children) {
+      let res = allRoutes(i.children);
+      list[index].children.push(...res);
+    }
+  });
 
+  return list;
+};
+//传入菜单栏的 id 数组 对应改变权限
 export const SetRoute = function (arr) {
   let route = [];
-  let r = configureStore.getState().routesdata.routesdata;
-  r.forEach((i) => {
-    route.push({ id: i.id, path: i.path, element: lazyLoad(i.element) });
-  });
-  console.log(Routes);
-  // console.log(arr);
-  let is = false;
+  let rightRoutes = configureStore.getState().routesdata.rightRoutes; //权限路由
   arr.forEach((i) => {
-    Routes[2].children[2].children.forEach((n) => {
-      if (n.id === i) {
-        is = true;
-      }
-    });
-    if (is) return;
-    route.forEach((j) => {
+    rightRoutes.forEach((j) => {
       if (i === j.id) {
-        Routes[2].children[2].children.push(j);
+        route.push(j);
       }
     });
   });
-  configureStore.dispatch(change());
-};
 
-export const Element = function () {
-  console.log(2, "aaaaaaaaaaaaaaaaaaaaaaaaa");
-
-  return useRoutes(Routes);
+  console.log(configureStore.dispatch);
+  configureStore.dispatch(change(route));
 };

@@ -1,16 +1,31 @@
-
-
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Button } from "antd";
+import { connect } from "react-redux";
+import { withRouter } from "../../Utils/index";
 
+const mapStateToProps = (state) => {
+  return {
+    state,
+  };
+};
 
+class HomeView extends React.Component {
+  logout = () => {
+    this.props.navigate("/login");
+    window.sessionStorage.removeItem("routes");
+  };
 
-class HomeView extends React.Component{
-    render() {
-        return (<div><h1>Home</h1> <Outlet /></div>)
-     
-    }
+  render() {
+    return (
+      <div>
+        <Button type="primary" onClick={this.logout}>
+          退出
+        </Button>
+        <Outlet />
+      </div>
+    );
+  }
 }
 
-
-export default HomeView
+export default withRouter(connect(mapStateToProps)(HomeView));
