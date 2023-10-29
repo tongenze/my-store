@@ -1,7 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 const routesdata = createSlice({
   name: "routesdata",
   initialState: {
+    //默认路由
     defaulyRoutes: [
       {
         path: "/",
@@ -31,7 +32,7 @@ const routesdata = createSlice({
         ],
       },
     ],
-
+    //配置在下层的权限路由 需要放入上面的children[]
     rightRoutes: [
       {
         id: 1,
@@ -45,18 +46,7 @@ const routesdata = createSlice({
       },
     ],
   },
-  reducers: {
-    change(state, action) {
-      state.defaulyRoutes[2].children[2].children = action.payload;
-      //登录之后无法马上获取更改后的值 还在找原因
-      window.sessionStorage.setItem(
-        "routes",
-        JSON.stringify(state.defaulyRoutes)
-      );
-    },
-  },
-});
+  reducers: {},
+})
 
-export const { change } = routesdata.actions;
-
-export default routesdata.reducer;
+export default routesdata.reducer

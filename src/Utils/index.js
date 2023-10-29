@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { theme } from "antd";
 
 //使用递归的方式实现数组、对象的深拷贝
 export function deepClone(obj) {
@@ -19,11 +20,19 @@ export function deepClone(obj) {
   return objClone;
 }
 
-//类组件无法直接使用useNavigate 高阶函数组件包裹一下
+//类组件无法直接使用hook 高阶函数组件包裹一下
 export function withRouter(Child) {
   return (props) => {
+    const usetoken = theme.useToken();
     const location = useLocation();
     const navigate = useNavigate();
-    return <Child {...props} navigate={navigate} location={location} />;
+    return (
+      <Child
+        {...props}
+        usetoken={usetoken}
+        navigate={navigate}
+        location={location}
+      />
+    );
   };
 }

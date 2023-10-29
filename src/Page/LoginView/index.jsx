@@ -1,33 +1,32 @@
-import React from "react";
-import { SetRoute } from "../../Router";
-import { connect } from "react-redux";
-import { add } from "../../Store/State/common";
-import { withRouter } from "../../Utils/index";
-import { Button } from "antd";
-
+import React from "react"
+import { connect } from "react-redux"
+import { add } from "../../Store/State/common"
+import { withRouter } from "../../Utils/index"
+import { Button } from "antd"
+import { SetRoute } from "../../"
 const mapStateToProps = (state) => {
   return {
     state,
-  };
-};
+  }
+}
 
 class LoginView extends React.Component {
-  componentDidMount() {
-    console.log(this);
-  }
 
   login = () => {
-    const a = [1, 2];
+    const a = [1, 2, 3]
 
-    SetRoute(a);
-    console.log("state:", this.props.state);
-    this.props.navigate("/home");
+    //SetRoute(a);
+    window.sessionStorage.setItem(
+      "routers",
+      window.btoa(window.encodeURIComponent(JSON.stringify(a))) //随便加个密
+    )
+    this.props.navigate("/home/welcome", { replace: true })
   };
   cmcc = () => {
-    this.props.dispatch(add(1));
+    this.props.dispatch(add(1))
   };
   render() {
-    const { state } = this.props;
+    const { state } = this.props
     return (
       <div className="login">
         <Button type="primary" onClick={this.login}>
@@ -38,8 +37,8 @@ class LoginView extends React.Component {
           add
         </Button>
       </div>
-    );
+    )
   }
 }
 //react-redux提供一个connect高阶组件帮助类i组件拿到state和调用dispatch
-export default withRouter(connect(mapStateToProps)(LoginView));
+export default withRouter(connect(mapStateToProps)(LoginView))
