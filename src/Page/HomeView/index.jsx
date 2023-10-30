@@ -6,8 +6,7 @@ import { GetRoutesArr, mateMenu } from "../../Router"
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  PoweroffOutlined
 } from "@ant-design/icons"
 import { Layout, Menu, Button } from "antd"
 const { Header, Sider, Content } = Layout
@@ -36,7 +35,7 @@ class HomeView extends React.Component {
 
   logout = () => {
     window.sessionStorage.removeItem("routers")
-    this.props.navigate("/login")
+    this.props.navigate("/login", { replace: true })
   };
   menuClick = (item) => {
     this.props.navigate("/home/content" + item.key)
@@ -51,7 +50,6 @@ class HomeView extends React.Component {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
             items={menuData}
             onClick={this.menuClick}
           />
@@ -59,8 +57,12 @@ class HomeView extends React.Component {
         <Layout>
           <Header
             style={{
+              position: 'relative',
               padding: 0,
+              height: 55,
               background: colorBgContainer,
+              lineHeight: '55px'
+
             }}
           >
             <Button
@@ -72,13 +74,17 @@ class HomeView extends React.Component {
                 })
               }}
               style={{
+                position: 'absolute',
+
                 fontSize: "16px",
-                width: 64,
-                height: 64,
+                width: 55,
+                height: 55,
               }}
             />
-            <Button type="primary" onClick={this.logout}>
-              退出
+            <Button title="退出系统" type="text" icon={<PoweroffOutlined />} style={{
+              fontSize: 16, width: 55, height: 55, position: 'absolute',
+              right: '20px',
+            }} onClick={this.logout}>
             </Button>
           </Header>
           <Content

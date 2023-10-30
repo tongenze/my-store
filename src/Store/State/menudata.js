@@ -10,7 +10,7 @@ const menudata = createSlice({
     menuData: [
       {
         key: "1",
-        // icon: <UserOutlined />,
+        icon: <UserOutlined />,
         label: '菜单1',
         children: [
           {
@@ -24,7 +24,7 @@ const menudata = createSlice({
 
       {
         key: "2",
-        // icon: <VideoCameraOutlined />,
+        icon: <VideoCameraOutlined />,
         label: '菜单2',
         children: [
           {
