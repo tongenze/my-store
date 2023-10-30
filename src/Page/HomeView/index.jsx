@@ -3,18 +3,31 @@ import { Outlet } from "react-router-dom"
 import { connect } from "react-redux"
 import { withRouter } from "../../Utils/index"
 import { GetRoutesArr, mateMenu } from "../../Router"
+import { Layout, Menu, Button, Dropdown, Modal, Form, Input } from "antd"
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PoweroffOutlined
+  PoweroffOutlined,
+  UserOutlined,
+  EditOutlined
 } from "@ant-design/icons"
-import { Layout, Menu, Button } from "antd"
+import "./home.css"
+
+//
 const { Header, Sider, Content } = Layout
 const mapStateToProps = (state) => {
   return {
     state,
   }
 }
+const items = [
+  {
+    key: '1',
+    label: (
+      <div>< EditOutlined />&nbsp; &nbsp; 修改密码</div>
+    ),
+  },
+]
 //匹配菜单栏
 class HomeView extends React.Component {
   componentDidMount() {
@@ -23,26 +36,63 @@ class HomeView extends React.Component {
     this.setState({
       menuData: mateMenu(arr, menuData)
     })
-
-    console.log(this)
   }
-
+  //状态
   state = {
     collapsed: false,
     colorBgContainer: this.props.usetoken.token.colorBgContainer,
     menuData: [],
-  };
+    isModalOpen: false,
+    form: this.props.useform[0]
 
+  };
+  //退出登录
   logout = () => {
     window.sessionStorage.removeItem("routers")
+    window.sessionStorage.removeItem('token')
     this.props.navigate("/login", { replace: true })
   };
+  //菜单栏点击触发
   menuClick = (item) => {
     this.props.navigate("/home/content" + item.key)
 
-  }
+  };
+  //用户下拉点击触发
+  openxg = ({ key }) => {
+    if (key === '1') {
+      this.setState({
+        isModalOpen: true
+      })
+    }
+  };
+  //弹框确认 验证通过拿到表单的三个值values 做旧密码与后台验证 通过后 发修改请求 后台需要用户名 从本地拿
+  handleOk = async () => {
+
+    try {
+      const values = await this.state.form.validateFields()
+      //
+      console.log('Success:', values)
+      //
+      window.sessionStorage.getItem('token')
+
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo)
+    }
+
+    // this.setState({
+    //   isModalOpen: false
+    // })
+
+  };
+  //弹框取消
+  handleCancel = () => {
+    this.state.form.resetFields()
+    this.setState({
+      isModalOpen: false
+    })
+  };
   render() {
-    const { collapsed, colorBgContainer, menuData } = this.state
+    const { collapsed, colorBgContainer, menuData, isModalOpen, form } = this.state
     return (
       <Layout style={{ height: "100%" }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -60,9 +110,9 @@ class HomeView extends React.Component {
               position: 'relative',
               padding: 0,
               height: 55,
-              background: colorBgContainer,
-              lineHeight: '55px'
-
+              backgroundColor: '#fff',
+              lineHeight: '55px',
+              boxShadow: '1px 1px 3px 0'
             }}
           >
             <Button
@@ -75,16 +125,44 @@ class HomeView extends React.Component {
               }}
               style={{
                 position: 'absolute',
-
                 fontSize: "16px",
                 width: 55,
                 height: 55,
+              }}>
+
+            </Button>
+            <Dropdown
+              menu={{
+                items,
+                onClick: this.openxg
               }}
-            />
-            <Button title="退出系统" type="text" icon={<PoweroffOutlined />} style={{
-              fontSize: 16, width: 55, height: 55, position: 'absolute',
-              right: '20px',
-            }} onClick={this.logout}>
+              placement="bottomRight"
+              arrow
+            >
+              <Button title="用户"
+                type='text'
+                icon={<UserOutlined />}
+                style={{
+                  fontSize: 16,
+                  width: 55,
+                  height: 55,
+                  position: 'absolute',
+                  right: '75px',
+                }}
+              ></Button>
+            </Dropdown>
+            <Button
+              title="退出系统"
+              type="text"
+              icon={<PoweroffOutlined />}
+              style={{
+                fontSize: 16,
+                width: 55,
+                height: 55,
+                position: 'absolute',
+                right: '20px',
+              }}
+              onClick={this.logout}>
             </Button>
           </Header>
           <Content
@@ -96,10 +174,78 @@ class HomeView extends React.Component {
             }}
           >
             <Outlet />
-
           </Content>
         </Layout>
+        {/* 弹出框密码修改 */}
+        <Modal title="修改密码" okText='确定' cancelText='取消' styles={{ body: { display: 'flex', justifyContent: 'center' } }} open={isModalOpen} onOk={this.handleOk} onCancel={this.handleCancel}>
+          <Form
+            name="basic"
+            form={form}
+            style={{
+              width: '70%',
+              textAlign: 'center',
+              display: "flex",
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="原密码"
+              name="oldpassword"
+              labelCol={{ span: 5 }}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入原密码!',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+              label="新密码"
+              name="newpassword"
+              labelCol={{ span: 5 }}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入新密码!',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Form.Item
+              label="确认密码"
+              name="password"
+              labelCol={{ span: 5 }}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入新密码!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('newpassword') === value) {
+                      return Promise.resolve()
+                    }
+                    return Promise.reject(new Error('输入的密码与新密码不一致！'))
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          </Form>
+        </Modal>
       </Layout>
+
+
     )
   }
 }

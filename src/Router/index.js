@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom"
 import React, { lazy } from "react"
-import configureStore from "../Store/index"
 import LoginView from "../Page/LoginView"
 import HomeView from "../Page/HomeView"
 import ContentView from "../Page/ContentView"
