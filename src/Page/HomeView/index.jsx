@@ -1,18 +1,19 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
-import { connect } from "react-redux"
-import { withRouter } from "../../Utils/index"
-import { GetRoutesArr, mateMenu } from "../../Router"
-import { Layout, Menu, Button, Dropdown, Modal, Form, Input } from "antd"
+import React from 'react'
+import { Outlet } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { withRouter, deepClone } from '../../Utils/index'
+import { GetRoutesArr, mateMenu } from '../../Router'
+import { Layout, Menu, Button, Dropdown, Modal, Form, Input } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PoweroffOutlined,
   UserOutlined,
-  EditOutlined
-} from "@ant-design/icons"
-import "./home.css"
-
+  EditOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons'
+import './home.css'
+import { addTag } from '../../Store/State/tagsdata'
 //
 const { Header, Sider, Content } = Layout
 const mapStateToProps = (state) => {
@@ -24,7 +25,10 @@ const items = [
   {
     key: '1',
     label: (
-      <div>< EditOutlined />&nbsp; &nbsp; 修改密码</div>
+      <div>
+        <EditOutlined />
+        &nbsp; &nbsp; 修改密码
+      </div>
     ),
   },
 ]
@@ -32,10 +36,23 @@ const items = [
 class HomeView extends React.Component {
   componentDidMount() {
     let arr = GetRoutesArr()
-    let menuData = this.props.state.menudata.menuData
-    this.setState({
-      menuData: mateMenu(arr, menuData)
+    let menuData = deepClone(this.props.state.menudata.menuData)
+    menuData.forEach((i) => {
+      switch (i.key) {
+        case '1':
+          i.icon = <UserOutlined />
+          break
+        case '2':
+          i.icon = <VideoCameraOutlined />
+          break
+        default:
+          break
+      }
     })
+    this.setState({
+      menuData: mateMenu(arr, menuData),
+    })
+    console.log(this)
   }
   //状态
   state = {
@@ -43,38 +60,44 @@ class HomeView extends React.Component {
     colorBgContainer: this.props.usetoken.token.colorBgContainer,
     menuData: [],
     isModalOpen: false,
-    form: this.props.useform[0]
-
-  };
+    form: this.props.useform[0],
+  }
   //退出登录
   logout = () => {
-    window.sessionStorage.removeItem("routers")
+    window.sessionStorage.removeItem('routers')
     window.sessionStorage.removeItem('token')
-    this.props.navigate("/login", { replace: true })
-  };
+    this.props.navigate('/login', { replace: true })
+  }
   //菜单栏点击触发
-  menuClick = (item) => {
-    this.props.navigate("/home/content" + item.key)
-
-  };
+  menuClick = (item, e) => {
+    this.props.dispatch(
+      addTag({
+        id: item.keyPath[1],
+        key: item.key,
+        label: item.domEvent.target.innerText,
+        color: 'processing',
+        bordeColor: '2px solid rgb(95, 159, 255)',
+      })
+    )
+    this.props.navigate('/home/content/' + item.key)
+    console.log(item.domEvent)
+  }
   //用户下拉点击触发
   openxg = ({ key }) => {
     if (key === '1') {
       this.setState({
-        isModalOpen: true
+        isModalOpen: true,
       })
     }
-  };
+  }
   //弹框确认 验证通过拿到表单的三个值values 做旧密码与后台验证 通过后 发修改请求 后台需要用户名 从本地拿
   handleOk = async () => {
-
     try {
       const values = await this.state.form.validateFields()
       //
       console.log('Success:', values)
       //
       window.sessionStorage.getItem('token')
-
     } catch (errorInfo) {
       console.log('Failed:', errorInfo)
     }
@@ -82,19 +105,19 @@ class HomeView extends React.Component {
     // this.setState({
     //   isModalOpen: false
     // })
-
-  };
+  }
   //弹框取消
   handleCancel = () => {
     this.state.form.resetFields()
     this.setState({
-      isModalOpen: false
+      isModalOpen: false,
     })
-  };
+  }
   render() {
-    const { collapsed, colorBgContainer, menuData, isModalOpen, form } = this.state
+    const { collapsed, colorBgContainer, menuData, isModalOpen, form } =
+      this.state
     return (
-      <Layout style={{ height: "100%" }}>
+      <Layout style={{ height: '100%' }}>
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical" />
           <Menu
@@ -112,7 +135,7 @@ class HomeView extends React.Component {
               height: 55,
               backgroundColor: '#fff',
               lineHeight: '55px',
-              boxShadow: '1px 1px 3px 0'
+              boxShadow: '1px 1px 3px 0',
             }}
           >
             <Button
@@ -125,22 +148,22 @@ class HomeView extends React.Component {
               }}
               style={{
                 position: 'absolute',
-                fontSize: "16px",
+                fontSize: '16px',
                 width: 55,
                 height: 55,
-              }}>
-
-            </Button>
+              }}
+            ></Button>
             <Dropdown
               menu={{
                 items,
-                onClick: this.openxg
+                onClick: this.openxg,
               }}
               placement="bottomRight"
               arrow
             >
-              <Button title="用户"
-                type='text'
+              <Button
+                title="用户"
+                type="text"
                 icon={<UserOutlined />}
                 style={{
                   fontSize: 16,
@@ -162,13 +185,13 @@ class HomeView extends React.Component {
                 position: 'absolute',
                 right: '20px',
               }}
-              onClick={this.logout}>
-            </Button>
+              onClick={this.logout}
+            ></Button>
           </Header>
           <Content
             style={{
-              margin: "16px 12px",
-              padding: 16,
+              margin: '10px 12px',
+              padding: 10,
               minHeight: 280,
               background: colorBgContainer,
             }}
@@ -177,16 +200,24 @@ class HomeView extends React.Component {
           </Content>
         </Layout>
         {/* 弹出框密码修改 */}
-        <Modal title="修改密码" okText='确定' cancelText='取消' styles={{ body: { display: 'flex', justifyContent: 'center' } }} open={isModalOpen} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal
+          title="修改密码"
+          okText="确定"
+          cancelText="取消"
+          styles={{ body: { display: 'flex', justifyContent: 'center' } }}
+          open={isModalOpen}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
           <Form
             name="basic"
             form={form}
             style={{
               width: '70%',
               textAlign: 'center',
-              display: "flex",
+              display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
             initialValues={{
               remember: true,
@@ -196,7 +227,7 @@ class HomeView extends React.Component {
             <Form.Item
               label="原密码"
               name="oldpassword"
-              labelCol={{ span: 5 }}
+              labelCol={{ span: 6 }}
               rules={[
                 {
                   required: true,
@@ -210,7 +241,7 @@ class HomeView extends React.Component {
             <Form.Item
               label="新密码"
               name="newpassword"
-              labelCol={{ span: 5 }}
+              labelCol={{ span: 6 }}
               rules={[
                 {
                   required: true,
@@ -223,7 +254,7 @@ class HomeView extends React.Component {
             <Form.Item
               label="确认密码"
               name="password"
-              labelCol={{ span: 5 }}
+              labelCol={{ span: 6 }}
               rules={[
                 {
                   required: true,
@@ -234,7 +265,9 @@ class HomeView extends React.Component {
                     if (!value || getFieldValue('newpassword') === value) {
                       return Promise.resolve()
                     }
-                    return Promise.reject(new Error('输入的密码与新密码不一致！'))
+                    return Promise.reject(
+                      new Error('输入的密码与新密码不一致！')
+                    )
                   },
                 }),
               ]}
@@ -244,8 +277,6 @@ class HomeView extends React.Component {
           </Form>
         </Modal>
       </Layout>
-
-
     )
   }
 }

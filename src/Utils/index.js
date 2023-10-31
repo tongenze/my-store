@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { theme, Form } from "antd"
+import { PointerSensor, useSensor } from '@dnd-kit/core'
 //使用递归的方式实现数组、对象的深拷贝
 export function deepClone(obj) {
   let objClone = Array.isArray(obj) ? [] : {}
@@ -26,6 +27,12 @@ export function withRouter(Child) {
     const location = useLocation()
     const navigate = useNavigate()
     const useform = Form.useForm()
+    const sensor = useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    })
+
     return (
       <Child
         {...props}
@@ -33,7 +40,9 @@ export function withRouter(Child) {
         navigate={navigate}
         location={location}
         useform={useform}
+        sensor={sensor}
       />
     )
   }
 }
+

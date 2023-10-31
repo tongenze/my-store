@@ -1,0 +1,27 @@
+.content_outside {
+  width: 100%;
+  height: 100%;
+
+  .content_tag {
+    border-bottom: 2px solid rgb(205, 204, 204);
+
+
+    .tag {
+      margin-right: 0;
+      margin-bottom: 5px;
+      font-size: 14px;
+      height: 25px;
+      line-height: 22px;
+
+    }
+
+    .tag:hover {
+      color: rgb(25, 144, 255);
+    }
+  }
+
+  .content_route {
+    width: 100%;
+    height: 100%;
+  }
+}

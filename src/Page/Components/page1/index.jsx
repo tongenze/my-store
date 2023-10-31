@@ -1,13 +1,9 @@
-import React from "react";
+import React from 'react'
 
-
-
-
-class Page1 extends React.Component{
-    render() {
-        return <h1>Page1</h1>
-    }
+class Page1 extends React.Component {
+  render() {
+    return <div>Page1</div>
+  }
 }
-
 
 export default Page1

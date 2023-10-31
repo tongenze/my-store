@@ -1,8 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons"
 
 const menudata = createSlice({
   name: "menudata",
@@ -10,13 +6,13 @@ const menudata = createSlice({
     menuData: [
       {
         key: "1",
-        icon: <UserOutlined />,
+        icon: "",
         label: '菜单1',
         children: [
           {
             id: 1,
-            key: "/page1",
-            label: "page1",
+            key: "page1",
+            label: "页面1",
           },
 
         ]
@@ -24,18 +20,18 @@ const menudata = createSlice({
 
       {
         key: "2",
-        icon: <VideoCameraOutlined />,
+        icon: "",
         label: '菜单2',
         children: [
           {
             id: 2,
-            key: "/page2",
-            label: "page2",
+            key: "page2",
+            label: "页面2",
           },
           {
             id: 3,
-            key: "/page3",
-            label: "page3",
+            key: "page3",
+            label: "页面3",
           },
 
         ]
@@ -45,5 +41,4 @@ const menudata = createSlice({
   },
   reducers: {},
 })
-
 export default menudata.reducer
