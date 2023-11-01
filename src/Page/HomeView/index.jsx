@@ -11,9 +11,11 @@ import {
   UserOutlined,
   EditOutlined,
   VideoCameraOutlined,
+  FundOutlined,
 } from '@ant-design/icons'
 import './home.css'
-import { addTag } from '../../Store/State/tagsdata'
+import { addTag, getsessionStorageData } from '../../Store/State/tagsdata'
+
 //
 const { Header, Sider, Content } = Layout
 const mapStateToProps = (state) => {
@@ -45,6 +47,10 @@ class HomeView extends React.Component {
         case '2':
           i.icon = <VideoCameraOutlined />
           break
+        case '3':
+          i.icon = <FundOutlined />
+          break
+
         default:
           break
       }
@@ -52,7 +58,6 @@ class HomeView extends React.Component {
     this.setState({
       menuData: mateMenu(arr, menuData),
     })
-    console.log(this)
   }
   //状态
   state = {
@@ -66,21 +71,20 @@ class HomeView extends React.Component {
   logout = () => {
     window.sessionStorage.removeItem('routers')
     window.sessionStorage.removeItem('token')
+    window.sessionStorage.removeItem('tagkey')
+    this.props.dispatch(getsessionStorageData([]))
     this.props.navigate('/login', { replace: true })
   }
   //菜单栏点击触发
   menuClick = (item, e) => {
     this.props.dispatch(
       addTag({
-        id: item.keyPath[1],
         key: item.key,
         label: item.domEvent.target.innerText,
-        color: 'processing',
-        bordeColor: '2px solid rgb(95, 159, 255)',
+        isactive: true,
       })
     )
     this.props.navigate('/home/content/' + item.key)
-    console.log(item.domEvent)
   }
   //用户下拉点击触发
   openxg = ({ key }) => {

@@ -1,11 +1,15 @@
 import { Navigate, useRoutes } from "react-router-dom"
 import React, { lazy } from "react"
+import configureStore from '../Store'
+
 import LoginView from "../Page/LoginView"
 import HomeView from "../Page/HomeView"
 import ContentView from "../Page/ContentView"
 import WelconmeView from "../Page/WelcomeView"
-import Page1 from "../Page/Components/page1"
-import Page2 from "../Page/Components/page2"
+import Page1 from "../Page/UsePages/page1"
+import Page2 from "../Page/UsePages/page2"
+import Page3 from "../Page/UsePages/page3"
+import Page4 from "../Page/UsePages/page4"
 
 //定义懒加载路由方法
 const lazyLoad = (modulename) => {
@@ -71,6 +75,16 @@ export const Router = function () {
               path: "/home/content/page2",
               element: RequireAuth(<Page2 />, 2),
             },
+            {
+              id: 3,
+              path: "/home/content/page3",
+              element: RequireAuth(<Page3 />, 3),
+            },
+            {
+              id: 4,
+              path: "/home/content/page4",
+              element: RequireAuth(<Page4 />, 4),
+            },
 
           ],
         },
@@ -87,44 +101,6 @@ export const Router = function () {
   ])
 }
 
-//路由数据组件化
-// export const allRoutes = function (routes) {
-//   let list = []
-//   routes.forEach((i, index) => {
-//     if (i.topath) {
-//       list.push({ path: i.path, element: i.topath })
-//     } else {
-//       if (!i.children) {
-//         list.push({ path: i.path, element: i.importpath })
-//       } else {
-//         list.push({
-//           path: i.path,
-//           element: i.importpath,
-//           children: [],
-//         })
-//       }
-//     }
-//     if (i.children) {
-//       let res = allRoutes(i.children)
-//       list[index].children.push(...res)
-//     }
-//   })
-
-//   return list
-// }
-//传入菜单栏的 id 数组 对应改变权限
-// export const SetRoute = function (arr) {
-//   let route = []
-//   let rightRoutes = configureStore.getState().routesdata.rightRoutes //权限路由
-//   arr.forEach((i) => {
-//     rightRoutes.forEach((j) => {
-//       if (i === j.id) {
-//         route.push(j)
-//       }
-//     })
-//   })
-//   return route
-// }
 //获取本地储存的权限id
 export const GetRoutesArr = function () {
   let rightroutes = []
@@ -164,4 +140,17 @@ export const mateMenu = function (routesArr, routeData) {
     })
   })
   return list
+}
+//抽取key
+export const sendkeys = function () {
+  const keys = []
+  let arr = configureStore.getState().menudata.menuData
+  arr.forEach((i) => {
+    if (i.children) {
+      i.children.forEach((j) => {
+        keys.push(j.key)
+      })
+    }
+  })
+  return keys
 }

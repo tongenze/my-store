@@ -36,6 +36,19 @@ const menudata = createSlice({
 
         ]
       },
+      {
+        key: "3",
+        icon: "",
+        label: '菜单3',
+        children: [
+          {
+            id: 4,
+            key: "page4",
+            label: "页面4",
+          },
+
+        ]
+      },
 
     ],
   },
