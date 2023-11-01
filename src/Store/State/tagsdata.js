@@ -1,5 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+
+const CunTags = function (tags) {
+  window.sessionStorage.setItem(
+    'tagkey',
+    window.btoa(
+      window.encodeURIComponent(
+        JSON.stringify(tags)
+      )
+    )
+  )
+
+}
+
+
 const tagesdata = createSlice({
   name: "tagesdata",
   initialState: {
@@ -7,53 +21,68 @@ const tagesdata = createSlice({
   },
   reducers: {
     addTag(state, action) {
-      let is = state.tagsData.find(item => item.id === action.payload.id)
+      let is = state.tagsData.find(item => item.key === action.payload.key)
       if (is) {
         state.tagsData.forEach(i => {
-          if (i.id === action.payload.id) {
-            i.color = 'processing'
-            i.bordeColor = '2px solid rgb(95, 159, 255)'
-
+          if (i.key === action.payload.key) {
+            i.isactive = true
           } else {
-            i.color = ''
-            i.bordeColor = ''
+            i.isactive = false
           }
         })
       } else {
         state.tagsData.forEach(i => {
           if (i) {
-            i.color = ''
-            i.bordeColor = ''
+            i.isactive = false
           }
         })
         state.tagsData.push(action.payload)
-
       }
-
+      let tags = []
+      state.tagsData.forEach(i => {
+        tags.push({ key: i.key, isactive: i.isactive, label: i.label })
+      })
+      CunTags(tags)
     },
+    //移除标签  必须用两个循环做两件事  放在一个循环开始的删除之后 就循环不到下一项了
     removeTag(state, action) {
       state.tagsData.forEach((i, index) => {
-        if (i.id === action.payload) {
+        if (i.key === action.payload.key) {
           state.tagsData.splice(index, 1)
         }
       })
+      if (action.payload.nextkey === '') { } else {
+        state.tagsData.forEach((i) => {
+          if (i.key === action.payload.nextkey) {
+            i.isactive = true
+          }
+        })
+      }
+      let tags = []
+      state.tagsData.forEach(i => {
+        tags.push({ key: i.key, isactive: i.isactive, label: i.label })
+      })
+      CunTags(tags)
+
     },
+    //
     clickTag(state, action) {
       state.tagsData.forEach(i => {
-        if (i.id === action.payload) {
-          i.color = 'processing'
-          i.bordeColor = '2px solid rgb(95, 159, 255)'
+        if (i.key === action.payload) {
+          i.isactive = true
 
         } else {
-          i.color = ''
-          i.bordeColor = ''
+          i.isactive = false
         }
       })
 
+    },
+    getsessionStorageData(state, action) {
+      state.tagsData = action.payload
     }
   },
 })
 
-export const { addTag, removeTag, clickTag } = tagesdata.actions
+export const { addTag, removeTag, clickTag, getsessionStorageData } = tagesdata.actions
 
 export default tagesdata.reducer
