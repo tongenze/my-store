@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { add } from '../../Store/State/common'
 import { withRouter } from '../../Utils/index'
 import { Button, Form, Input } from 'antd'
+import { userLogin } from '../../API/api'
 import './login.css'
 
 const mapStateToProps = (state) => {
@@ -11,9 +12,7 @@ const mapStateToProps = (state) => {
   }
 }
 class LoginView extends React.Component {
-  componentDidMount() {
-    console.log(this.state)
-  }
+  componentDidMount() {}
   state = {
     form: this.props.useform[0],
   }
@@ -22,7 +21,11 @@ class LoginView extends React.Component {
     try {
       const values = await this.state.form.validateFields()
       //
+      await userLogin(values).then((res) => {
+        console.log(res)
+      })
       console.log('Success:', values)
+
       //
       window.sessionStorage.setItem('token', values.username)
       const a = [1, 2, 3, 4]
@@ -65,7 +68,7 @@ class LoginView extends React.Component {
             <div className="login_title">用户登录</div>
             <Form.Item
               label="用户名"
-              name="username"
+              name="usercode"
               labelCol={{ span: 5 }}
               rules={[
                 {
