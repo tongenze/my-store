@@ -16,17 +16,17 @@ const mapStateToProps = (state) => {
 class ContentView extends React.Component {
   componentDidMount() {
     console.log(this)
+    console.log(this.props.state.tagesdata.tagsData)
     // 监听redux state状态改变
     configureStore.subscribe(() => {
       this.setState({ items: configureStore.getState().tagesdata.tagsData })
-
       let str = this.props.location.pathname
       let arr = str.split('/')
-      console.log(arr[arr.length - 1])
+      console.log('执行了setstate', arr[arr.length - 1])
     })
   }
   state = {
-    items: [],
+    items: this.props.state.tagesdata.tagsData,
   }
   //移除tag
   preventDefault = (id) => {
@@ -51,6 +51,7 @@ class ContentView extends React.Component {
           <Space size={[0]} wrap>
             {items.map((i) => (
               <div
+                key={i.id}
                 style={{
                   marginRight: '8px',
                   marginBottom: '-2px',
