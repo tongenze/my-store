@@ -58,7 +58,6 @@ class ContentView extends React.Component {
   }
   state = {
     items: this.props.state.tagesdata.tagsData,
-    items: this.props.state.tagesdata.tagsData,
   }
   //移除tag
   preventDefault = (key) => {
@@ -109,7 +108,6 @@ class ContentView extends React.Component {
           <Space size={[0]} wrap>
             {items.map((i) => (
               <div
-                key={i.id}
                 key={i.key}
                 style={{
                   marginRight: '8px',
