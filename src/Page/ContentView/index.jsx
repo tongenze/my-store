@@ -45,14 +45,11 @@ const getkeys = function (obj) {
 }
 class ContentView extends React.Component {
   componentDidMount() {
+    //页面刷新时 获取本地存储的状态 放入redux
     this.props.dispatch(getsessionStorageData(getkeys(this)))
-    console.log(this.props.state.tagesdata.tagsData)
     // 监听redux state状态改变
     configureStore.subscribe(() => {
       this.setState({ items: configureStore.getState().tagesdata.tagsData })
-      let str = this.props.location.pathname
-      let arr = str.split('/')
-      console.log('执行了setstate', arr[arr.length - 1])
     })
     //
   }

@@ -1,9 +1,12 @@
 import React from 'react'
-import { Space, Table, Tag } from 'antd'
+import { Table } from 'antd'
+
+
+
+
 
 class MyTable extends React.Component {
   componentDidMount() {
-    console.log(this)
   }
 
   render() {

@@ -16,7 +16,7 @@ const lazyLoad = (modulename) => {
   const Module = lazy(() => import(`../Page/${modulename}`))
   return <Module />
 }
-//路由鉴权组件
+//路由鉴权组件 传入组件和组件的id
 
 function RequireAuth(children, id) {
   let token = window.sessionStorage.getItem('token')

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-
+//标签改动存入本地 防止页面刷新丢失
 const CunTags = function (tags) {
   window.sessionStorage.setItem(
     'tagkey',
@@ -10,16 +10,14 @@ const CunTags = function (tags) {
       )
     )
   )
-
 }
-
-
 const tagesdata = createSlice({
   name: "tagesdata",
   initialState: {
     tagsData: []
   },
   reducers: {
+    //添加标签
     addTag(state, action) {
       let is = state.tagsData.find(item => item.key === action.payload.key)
       if (is) {
@@ -65,7 +63,7 @@ const tagesdata = createSlice({
       CunTags(tags)
 
     },
-    //
+    //点击标签触发修改标签活跃状态
     clickTag(state, action) {
       state.tagsData.forEach(i => {
         if (i.key === action.payload) {
@@ -84,5 +82,4 @@ const tagesdata = createSlice({
 })
 
 export const { addTag, removeTag, clickTag, getsessionStorageData } = tagesdata.actions
-
 export default tagesdata.reducer

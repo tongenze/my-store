@@ -1,5 +1,31 @@
 import React from 'react'
-import { Space, Tag, Table, Form, Input, Button, Col, Row } from 'antd'
+import { Space, Tag } from 'antd'
+import MyTable from '../../../Components/myTable'
+import MyForm from '../../../Components/myForm'
+
+const data = [
+  {
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
+    tags: ['nice', 'developer'],
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+    tags: ['loser'],
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sydney No. 1 Lake Park',
+    tags: ['cool', 'teacher'],
+  },
+]
 
 const columns = [
   {
@@ -49,88 +75,13 @@ const columns = [
     ),
   },
 ]
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-]
+
 class Page1 extends React.Component {
   render() {
     return (
       <div>
-        <Form
-          name="wrap"
-          labelCol={{}}
-          labelAlign="left"
-          labelWrap
-          wrapperCol={{}}
-          colon={false}
-          style={{ Width: '100%' }}
-          layout="inline"
-        >
-          <Row>
-            <Col span={6}>
-              <Form.Item
-                style={{ marginBottom: '10px' }}
-                label="Normal label"
-                name="username"
-                labelAlign={{}}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="Normal label" name="username" labelAlign={{}}>
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item
-                label="Normcccal label"
-                name="username"
-                labelAlign={{}}
-              >
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="Normal label" name="username" labelAlign={{}}>
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="Normal label" name="username" labelAlign={{}}>
-                <Input />
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-        <Table bordered size="small" columns={columns} dataSource={data} />
+        <MyForm />
+        <MyTable bordered size={'small'} columns={columns} dataSource={data} />
       </div>
     )
   }
