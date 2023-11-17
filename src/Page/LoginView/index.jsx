@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { add } from '../../Store/State/common'
 import { withRouter } from '../../Utils/index'
 import { Button, Form, Input } from 'antd'
 import { userLogin } from '../../API/api'
@@ -41,9 +40,6 @@ class LoginView extends React.Component {
   //重置表单
   reset = () => {
     this.state.form.resetFields()
-  }
-  cmcc = () => {
-    this.props.dispatch(add(1))
   }
   render() {
     const { form } = this.state
@@ -111,5 +107,5 @@ class LoginView extends React.Component {
     )
   }
 }
-//react-redux提供一个connect高阶组件帮助类i组件拿到state和调用dispatch
+//react-redux提供一个connect高阶组件帮助类组件拿到state和调用dispatch
 export default withRouter(connect(mapStateToProps)(LoginView))
