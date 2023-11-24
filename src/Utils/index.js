@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import { theme, Form } from "antd"
 import { PointerSensor, useSensor } from '@dnd-kit/core'
+import { useAliveController } from 'react-activation'
 //使用递归的方式实现数组、对象的深拷贝
 export function deepClone(obj) {
   let objClone = Array.isArray(obj) ? [] : {}
@@ -23,6 +24,7 @@ export function deepClone(obj) {
 //类组件无法直接使用hook 高阶函数组件包裹一下
 export function withRouter(Child) {
   return (props) => {
+    const { drop, dropScope, clear, getCachingNodes } = useAliveController()
     const usetoken = theme.useToken()
     const location = useLocation()
     const navigate = useNavigate()
@@ -41,6 +43,7 @@ export function withRouter(Child) {
         location={location}
         useform={useform}
         sensor={sensor}
+        drop={drop}
       />
     )
   }

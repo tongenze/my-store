@@ -2,10 +2,6 @@ import { Navigate, useRoutes } from "react-router-dom"
 import React, { lazy } from "react"
 import KeepAlive from 'react-activation'
 import configureStore from '../Store'
-<<<<<<< HEAD
-import KeepAlive from 'react-activation'
-=======
->>>>>>> 47bd70cbc563dd7ec8f0b9bec686f1edb1887ac6
 import LoginView from "../Page/LoginView"
 import HomeView from "../Page/HomeView"
 import ContentView from "../Page/ContentView"
@@ -70,12 +66,12 @@ export const Router = function () {
             {
               id: 1,
               path: "/home/content/page1",
-              element: RequireAuth(<KeepAlive cacheKey='1'><Page1 /></KeepAlive>, 1),
+              element: RequireAuth(<KeepAlive cacheKey='1' name='page1'><Page1 /></KeepAlive>, 1),
             },
             {
               id: 2,
               path: "/home/content/page2",
-              element: RequireAuth(<KeepAlive cacheKey='2'><Page2 /></KeepAlive>, 2),
+              element: RequireAuth(<KeepAlive cacheKey='2' name='page2'><Page2 /></KeepAlive>, 2),
             },
             {
               id: 3,

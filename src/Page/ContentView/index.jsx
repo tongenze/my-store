@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Tag, Space } from 'antd'
+import { Tag, Space, Empty } from 'antd'
 import { withRouter } from '../../Utils'
 import configureStore from '../../Store'
 import { sendkeys } from '../../Router'
@@ -17,7 +17,9 @@ const mapStateToProps = (state) => {
     state,
   }
 }
+
 //校验当前页面路由 防止在地址直接修改路径 刷新 造成奇怪现象
+
 const getkeys = function (obj) {
   const keys = sendkeys()
   const str = window.sessionStorage.getItem('tagkey')
@@ -43,15 +45,15 @@ const getkeys = function (obj) {
   }
   return tags
 }
+
 class ContentView extends React.Component {
   componentDidMount() {
-    //页面刷新时 获取本地存储的状态 放入redux
-    this.props.dispatch(getsessionStorageData(getkeys(this)))
-    // 监听redux state状态改变
+    //先创建一个监听redux的监听方法 变化了重新赋值
     configureStore.subscribe(() => {
       this.setState({ items: configureStore.getState().tagesdata.tagsData })
     })
-    //
+    //页面刷新时 获取本地存储的状态 放入redux
+    this.props.dispatch(getsessionStorageData(getkeys(this)))
   }
   state = {
     items: this.props.state.tagesdata.tagsData,
@@ -81,6 +83,7 @@ class ContentView extends React.Component {
           }
         })
       }
+      this.props.drop(key) //卸载缓存
       this.props.dispatch(removeTag({ key, nextkey }))
     }
   }
@@ -94,13 +97,22 @@ class ContentView extends React.Component {
 
   render() {
     const { items } = this.state
+
+    if (items.length === 0) {
+      return (
+        <div className="content_outside">
+          <Empty imageStyle={{ height: '500px' }} description="空单据" />
+        </div>
+      )
+    }
     return (
       <div className="content_outside">
         <div
           className="content_tag"
           style={{
-            borderBottom: `${items.length === 0 ? '' : '2px solid rgb(205, 204, 204)'
-              }`,
+            borderBottom: `${
+              items.length === 0 ? '' : '2px solid rgb(205, 204, 204)'
+            }`,
           }}
         >
           <Space size={[0]} wrap>
@@ -110,8 +122,9 @@ class ContentView extends React.Component {
                 style={{
                   marginRight: '8px',
                   marginBottom: '-2px',
-                  borderBottom: `${i.isactive ? '2px solid rgb(95, 159, 255)' : ''
-                    }`,
+                  borderBottom: `${
+                    i.isactive ? '2px solid rgb(95, 159, 255)' : ''
+                  }`,
                 }}
               >
                 <Tag
@@ -129,7 +142,10 @@ class ContentView extends React.Component {
             ))}
           </Space>
         </div>
-        <div className="content_route">
+        <div
+          className="content_route"
+          style={{ height: 'calc(100vh - 110px)', overflowY: 'auto' }}
+        >
           <Outlet />
         </div>
       </div>

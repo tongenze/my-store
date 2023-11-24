@@ -13,13 +13,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
 html {
   height: 100%;
   padding: 0;
   margin: 0;
 }
+
 #root {
   height: 100%;
   padding: 0;
   margin: 0;
+}
+
+/*去除底部滚动条 需全局配置才能生效*/
+.page-scroll .el-scrollbar__wrap {
+  overflow-x: hidden;
+}
+
+/*表格滚动条样式配置*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+  background-color: #e4e4e4;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #a1a3a9;
+  border-radius: 6px;
 }

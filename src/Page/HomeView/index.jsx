@@ -72,7 +72,7 @@ class HomeView extends React.Component {
     window.sessionStorage.removeItem('routers')
     window.sessionStorage.removeItem('token')
     window.sessionStorage.removeItem('tagkey')
-    this.props.dispatch(getsessionStorageData([]))//退出清空redux
+    this.props.dispatch(getsessionStorageData([])) //退出清空redux
     this.props.navigate('/login', { replace: true })
   }
   //菜单栏点击触发
