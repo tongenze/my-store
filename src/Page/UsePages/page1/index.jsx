@@ -2,7 +2,6 @@ import React from 'react'
 import { Input, Space, Tag, Select, Button } from 'antd'
 import MyTable from '../../../Components/myTable'
 import MyForm from '../../../Components/myForm'
-
 const data = [
   {
     key: '1',
@@ -76,96 +75,91 @@ const columns = [
   },
 ]
 
+
 class Page1 extends React.Component {
-  onChange = (value) => {
-    console.log(value)
-    if (value === 'tom') {
-      this.MyForm.state.form.setFieldValue({
-        name1: 'lucy',
-      })
-    }
-  }
-  filterOption = (input, option) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+
   state = {
-    formdata: [
+    options: [
       {
-        id: 1,
-        span: 6,
-        label: '名字：',
-        name: 'name1',
-        component: <Input allowClear />,
+        value: 'jack',
+        label: 'Jack',
       },
       {
-        id: 2,
-        span: 6,
-        label: '名字：',
-        name: 'name2',
-        component: (
-          <Select
-            showSearch
-            placeholder="Select a person"
-            optionFilterProp="children"
-            onChange={this.onChange}
-            filterOption={this.filterOption}
-            options={[
-              {
-                value: 'jack',
-                label: 'Jack',
-              },
-              {
-                value: 'lucy',
-                label: 'Lucy',
-              },
-              {
-                value: 'tom',
-                label: 'Tom',
-              },
-            ]}
-          />
-        ),
+        value: 'lucy',
+        label: 'Lucy',
       },
       {
-        id: 3,
-        span: 6,
-        label: '名字：',
-        name: 'name3',
-        component: (
-          <Select
-            showSearch
-            placeholder="Select a person"
-            optionFilterProp="children"
-            onChange={this.onChange}
-            filterOption={this.filterOption}
-            options={[
-              {
-                value: 'jack',
-                label: 'Jack',
-              },
-              {
-                value: 'lucy',
-                label: 'Lucy',
-              },
-              {
-                value: 'tom',
-                label: 'Tom',
-              },
-            ]}
-          />
-        ),
+        value: 'tom',
+        label: 'Tom',
       },
     ],
   }
+  //选项框切换
+  onChange = (value) => {
+    if (value === 'tom') {
+      this.MyForm.state.form.setFieldsValue({
+        name3: 'lucy',
+      })
+    }
+  }
+  //选项框筛选
+  filterOption = (input, option) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+  //form渲染数据
+  formdata = [
+    {
+      id: 1,
+      span: 6,
+      label: '名字：',
+      name: 'name1',
+      component: <Input allowClear />,
+    },
+    {
+      id: 2,
+      span: 6,
+      label: '名字：',
+      name: 'name2',
+      component: (
+        <Select
+          showSearch
+          placeholder="Select a person"
+          optionFilterProp="children"
+          onChange={this.onChange}
+          filterOption={this.filterOption}
+          allowClear
+          options={this.state.options}
+        />
+      ),
+    },
+    {
+      id: 3,
+      span: 6,
+      label: '名字：',
+      name: 'name3',
+      component: (
+        <Select
+          showSearch
+          placeholder="Select a person"
+          optionFilterProp="children"
+          onChange={this.onChange}
+          filterOption={this.filterOption}
+          allowClear
+          options={this.state.options}
+        />
+      ),
+    },
+  ]
+  //提交获取form表单数据
   submit = (obj) => {
     console.log(obj)
   }
 
   render() {
-    const { formdata } = this.state
     return (
       <div>
         <MyForm
-          formdata={formdata}
+          name='page1'
+          formdata={this.formdata}
           submit={this.submit}
           onRef={(node) => (this.MyForm = node)}
         />

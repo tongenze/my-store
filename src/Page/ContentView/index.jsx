@@ -56,6 +56,7 @@ class ContentView extends React.Component {
   state = {
     items: this.props.state.tagesdata.tagsData,
   }
+  //
   //移除tag
   preventDefault = (key) => {
     let str = this.props.location.pathname

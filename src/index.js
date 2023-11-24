@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
 import Store from "./Store"
 import { AliveScope } from 'react-activation'
+<<<<<<< HEAD
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <BrowserRouter>
@@ -15,6 +16,17 @@ root.render(
         <App />
       </Provider>
     </AliveScope>
+=======
+
+const root = ReactDOM.createRoot(document.getElementById("root"))
+root.render(
+  <BrowserRouter>
+    <Provider store={Store}>
+      <AliveScope>
+        <App />
+      </AliveScope>
+    </Provider>
+>>>>>>> 47bd70cbc563dd7ec8f0b9bec686f1edb1887ac6
   </BrowserRouter>
 )
 

@@ -1,7 +1,11 @@
 import { Navigate, useRoutes } from "react-router-dom"
 import React, { lazy } from "react"
-import configureStore from '../Store'
 import KeepAlive from 'react-activation'
+import configureStore from '../Store'
+<<<<<<< HEAD
+import KeepAlive from 'react-activation'
+=======
+>>>>>>> 47bd70cbc563dd7ec8f0b9bec686f1edb1887ac6
 import LoginView from "../Page/LoginView"
 import HomeView from "../Page/HomeView"
 import ContentView from "../Page/ContentView"
@@ -30,11 +34,9 @@ function RequireAuth(children, id) {
       ) : (
         <Navigate to="*" />// 跳转到404
       )
-
     } else {
       return children
     }
-
   } else {
     return (<Navigate to="/login" replace />)// 跳转到登录
   }

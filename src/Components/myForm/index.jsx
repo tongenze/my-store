@@ -1,26 +1,20 @@
 import React from 'react'
-import { Input, Row, Col, Form, Button, Select } from 'antd'
+import { Row, Col, Form, Button } from 'antd'
 import { withRouter } from '../../Utils'
 class MyForm extends React.Component {
   componentDidMount() {
-    console.log(this.props)
     this.props.onRef && this.props.onRef(this)
   }
   state = {
     form: this.props.useform[0],
   }
-  // submit = (val) => {
-  //   console.log(val)
-  // }
-  ccc = () => {
-    this.state.form.resetFields()
-  }
   render() {
-    const { formdata, form } = this.props
+    const { formdata } = this.props
+    const { form } = this.state
     return (
       <div>
         <Form
-          name="wrap"
+          name={this.props.name}
           form={form}
           labelCol={{}}
           labelAlign="left"
@@ -31,6 +25,9 @@ class MyForm extends React.Component {
           layout="inline"
           justify="center"
           autoComplete="off"
+          initialValues={{
+            remember: true,
+          }}
           onFinish={this.props.submit}
         >
           <Row style={{ Width: '100%' }}>
@@ -52,7 +49,6 @@ class MyForm extends React.Component {
                 <Button type="primary" htmlType="submit">
                   submit
                 </Button>
-                <Button onClick={this.ccc}>xxx</Button>
               </Form.Item>
             </Col>
           </Row>
